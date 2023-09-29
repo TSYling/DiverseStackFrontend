@@ -1,37 +1,40 @@
 import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import {connect} from "react-redux";
+import { Divider, Typography } from "antd";
+const { Title, Paragraph, Text, Link } = Typography;
 function IndexComponent(props) {
-  const userEmail = props.email;
   useEffect(() => {
     document.title = props.title;
   });
-  useEffect(() => {
-    // 从后端拿功能分类
-    // TODO
-  });
-  return userEmail == null ? (
+  return (
     <>
-      <div>欢迎来到主页</div>
-      <NavLink to="/login">请登录</NavLink>
+      <Typography
+        style={{
+          // backgroundColor:"skyblue",
+          height: "calc(100vh - 200px)",
+          margin: 20,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {/* <Title>介绍</Title>
+          <Paragraph>
+            本项目于2023年暑期开发:使用React + Redux + Ant Design + Ant ProComponent 实现。
+          </Paragraph> */}
+          <Title>欢迎！</Title>
+        </div>
+      </Typography>
     </>
-  ) : (
-      <>
-        <div>欢迎,{ userEmail }<NavLink to="/logout">注销</NavLink></div>
-        <NavLink to="/music">音乐中心</NavLink>
-      </>
   );
 }
-function mapStateToProps(state) {
-  return {
-    email: state.userReducer.info.email,
-  };
-}
-function mapDispatchToProps(dispatch) {
-  return {
-  };
-}
 
-const IndexComponent2 = connect(mapStateToProps,mapDispatchToProps)(IndexComponent);
 
-export default IndexComponent2;
+export default IndexComponent;

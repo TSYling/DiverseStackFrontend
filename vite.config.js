@@ -14,5 +14,10 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
+    // https: {
+    //   key: "C:/Users/Wuser/Desktop/localhost+2-key.pem",
+    //   cert: "C:/Users/Wuser/Desktop/localhost+2.pem",
+    // },
+    port:5173
   },
 });

@@ -1,0 +1,140 @@
+.logo{
+  display: flex;
+  min-width: fit-content;
+}
+.header{
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 3%), 0 1px 6px -1px rgb(0 0 0 / 2%), 0 2px 4px 0 rgb(0 0 0 / 2%);
+  .menu{
+    border-bottom: 0;
+    padding-left: 20px;
+    width: 60%;
+  }
+  .logo{
+    padding-right: 30px;
+  }
+  .login-container{
+    display: flex;
+    width: 35%;
+    min-width: 50px;
+    justify-content: right;
+    align-items: center;
+    flex-grow: 1;
+    padding-right: 50px;
+    .login-button{
+    align-items: center;
+    text-align: center;
+    height: 40px;
+    }
+  }
+}
+.sider{
+  .logo-container{
+    padding-top: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.user-icon{
+  margin-right: 10px;
+}
+.user-info-title{
+  padding-top: 10px;
+  max-width: 300px;
+  // .main-info{
+    // display: flex;
+  // }
+  .social-info{
+    padding: 0 10%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .account-info{
+    height: 30%;
+    padding: 0 5%;
+    display:flex;
+    flex-direction: column;
+    padding-bottom: 5%;
+  }
+}
+
+.user-info-content{
+  .user-center{
+    // border: 0;
+    width: 100%;
+    div{
+      display: flex;
+    }
+  }
+  .logout{
+    // border: 0;
+    width: 100%;
+    div{
+      display: flex;
+    }
+  }
+}
+.icon{
+  padding-right: 10px;
+}
+.info-box{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  align-items: center;
+  padding: 0;
+  width: 30%;
+  h3{
+    margin: 0;
+  }
+  span{
+    font-weight: 800;
+    font-size: 16px;
+  }
+}
+.ant-layout-sider-children{
+  display:flex;
+  flex-direction:column;
+}
+.hidden{
+  display: none;
+}
+@media (min-width: 1000px) {
+  .sider-button{
+    display: none;
+  }
+  .sider{
+    display: none;
+  }
+}
+@media (max-width: 1000px) {
+  .header .logo{
+    display: none;
+  }
+  .header{
+    padding-left: 0;
+  }
+  .header .menu{
+    display: none;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+// 悬浮按钮
+.change-theme-button{
+    position: absolute;
+    right: 30px;
+}

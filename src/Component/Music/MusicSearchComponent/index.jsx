@@ -104,7 +104,8 @@ function MusicSearchComponent(props) {
                 item.ARTIST +
                 "专辑：" +
                 item.ALBUM +
-                (item.mvpayinfo.vid == "0"? "":"  暂无法播放 ")
+                (item.mvpayinfo.vid == "0" ? "" : "  暂无法播放 ") +
+                (item.payInfo.play == "1111" ? "         VIP":"")
               }
             />
           </List.Item>

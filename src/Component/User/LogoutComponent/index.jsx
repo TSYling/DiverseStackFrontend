@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import service from '../../../util/axoisUtil'
+import {logout} from "../../../store/reducers/userReducer"
 function LogoutComponent(props) {
-
+  const dispatch = useDispatch()
   useEffect(() => {
     document.title = props.title
     service.post("/user/logout")
@@ -11,7 +12,7 @@ function LogoutComponent(props) {
         // 退出登录后会缺少csrftoken因此需要重新获取
         service.get("/csrf")
         // 同时设置登录状态
-        props.signOut();
+        dispatch(logout())
         // 改变localstorage
         localStorage.setItem("hadLogined","no")
       })
@@ -19,11 +20,5 @@ function LogoutComponent(props) {
 
   return <Navigate to="/" replace />
 }
-function mapDispatchToProps(dispatch) {
-  return {
-    signOut: () => dispatch({type:"LOGOUT"}),
-  };
-}
-const LoginComponent2 = connect(null,mapDispatchToProps)(LogoutComponent)
 
-export default LoginComponent2
+export default LogoutComponent

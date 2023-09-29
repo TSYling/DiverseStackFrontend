@@ -1,200 +1,281 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom"
-import userService from "../../../service/User"
-import { connect } from "react-redux";
-import "./index.css";
-// import {
-//   MailOutlined,
-// } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import config from "../../../config/config.json";
+import userService from "../../../service/User";
+import vertifyService from "../../../service/VertifyCode/index";
+import "./index.scss";
+import { LockOutlined, SendOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  LoginFormPage,
+  ProFormCaptcha,
+  ProFormCheckbox,
+  ProFormText,
+} from "@ant-design/pro-components";
+import { Alert, Divider, message, Typography, Tabs, Image, Card } from "antd";
+
+import { useDispatch, useSelector } from "react-redux";
+const { Text, Title } = Typography;
+
 function LoginComponent(props) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [formStatus, setformStatus] = useState(false);
+  const dispatch = useDispatch();
+  const userReducer = useSelector((state) => state.userReducer);
   useEffect(() => {
-    if (props.isLogin == true) navigate("/", { replace: true });
-  
+    if (userReducer.isLogin == true) navigate("/", { replace: true });
     document.title = props.title;
   });
-  var container = null;
 
-  const signUpClick = () => {
-    container.classList.add("sign-up-mode");
+  const loginOnFinish = async (data) => {
+    setformStatus(true);
+    dispatch(userService.loginService(data)).catch((e) => {
+      let info = e.response.data.information;
+      messageApi.open({
+        type: "error",
+        content: info,
+      });
+    });
+    setformStatus(false);
   };
-  const signInClick = () => {
-    container.classList.remove("sign-up-mode");
-  };
-  const loginOnFinish = (data) => {
-    userService.login(data)
-  };
+  const [loginType, setLoginType] = useState("account");
   return (
-    <>
-      <div className="container" ref={(er) => (container = er)}>
-        <div className="form-warp">
-          <Form
-            name="base"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
-            style={{ maxWidth: 600 }}
-            initialValues={{ remember: true }}
-            className="sign-in-form"
-            onFinish={loginOnFinish}
-            // onFinishFailed={onFinishFailed}
-            autoComplete="off"
+    <div
+      style={{
+        // backgroundColor: "white",
+        // height: "calc(100vh - 48px)",
+        height: "100vh",
+      }}
+    >
+      {config.phoneActive ? (
+        <></>
+      ) : (
+        <Alert
+          showIcon
+          message="注意: 手机验证码登录、注册暂不可用!"
+          type="warning"
+          closable
+        />
+      )}
+      {contextHolder}
+      <LoginFormPage
+        disabled={formStatus}
+        backgroundImageUrl="./login_bg3.jpg"
+        // backgroundVideoUrl="./bg-video.mp4"
+        logo={config.logoUrl}
+        title={
+          <Title
+            onClick={() => {
+              window.location.href = "/";
+            }}
+            style={{ margin: 0, cursor: "pointer" }}
           >
-            <Form.Item>
-              <h1 className="form-title">登 录</h1>
-            </Form.Item>
-            <Form.Item
-              // label="用户名"
-              name="username"
-              rules={[
-                { required: true, message: "账号不能为空!" },
-                {
-                  pattern: /^[\w.-]+@\w+\.\w+(\.\w+)?$/,
-                  message: "邮箱格式错误",
-                },
-              ]}
-            >
-              <Input placeholder="Email" className="Input" />
-            </Form.Item>
-
-            <Form.Item
-              // label="密码"
-              name="password"
-              rules={[
-                { required: true, message: "密码不能为空!" },
-                { max: 20, message: "密码长度不能超过20个字符!" },
-                { min: 6, message: "密码长度不能少于6位、多于20位" },
-              ]}
-            >
-              <Input.Password
-                placeholder="password"
-                className="Input"
-                maxLength={20}
+            {config.webSiteTitle}
+          </Title>
+        }
+        subTitle={config.webSiteSubTitle}
+        onFinish={loginOnFinish}
+        activityConfig={{
+          style: {
+            display: "flex",
+            margin: 0,
+            padding: 0,
+            width: "100%",
+            height: "62.5%",
+          },
+          action: (
+            <div className="video-container">
+              <video
+                src="./bg-video.mp4"
+                className="bg-video"
+                autoPlay
+                muted
+                loop
               />
-            </Form.Item>
-
-            <Form.Item>
-              <Button type="primary" htmlType="submit" className="submit-btn">
-                立即登录
-              </Button>
-            </Form.Item>
-          </Form>
-          <Form
-            name="registerForm"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
-            style={{ maxWidth: 600 }}
-            initialValues={{ remember: true }}
-            className="sign-up-form"
-            // onFinishFailed={onFinishFailed}
-            autoComplete="off"
+              <Card className="text-container">
+                <Title className="title">
+                  {config["login-page-info"].title}
+                </Title>
+                <Title className="title">
+                  {"日期: " + config["login-page-info"].date}
+                </Title>
+                <Title className="title">
+                  {"信息: " + config["login-page-info"].content}
+                </Title>
+              </Card>
+            </div>
+          ),
+        }}
+        actions={
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
           >
-            <Form.Item>
-              <h1 className="form-title">注 册</h1>
-            </Form.Item>
-            <Form.Item
+            <a
+              style={{
+                marginLeft: "auto",
+                marginBottom: 10,
+                marginTop: 3,
+              }}
+              href="/register"
+            >
+              没有账号? 立即注册
+            </a>
+            <Divider plain style={{ marginTop: 0 }}>
+              <span
+                style={{ color: "#CCC", fontWeight: "normal", fontSize: 14 }}
+              >
+                其他登录方式
+              </span>
+            </Divider>
+            <Text>暂无</Text>
+            <Image
+              src="./login-bg2.jpeg"
+              preview={false}
+              style={{
+                marginTop: "70px",
+                transform: "scale(1.2)",
+                paddingBottom: "40px",
+              }}
+            ></Image>
+          </div>
+        }
+      >
+        <Tabs
+          centered
+          activeKey={loginType}
+          onChange={(activeKey) => setLoginType(activeKey)}
+          items={config.loginTabItems}
+        ></Tabs>
+        {loginType === "account" && (
+          <>
+            <ProFormText
               name="username"
+              fieldProps={{
+                size: "large",
+                prefix: <UserOutlined className={"prefixIcon"} />,
+              }}
+              placeholder={"手机/邮箱/ID (id以i+id号)"}
               rules={[
-                { required: true, message: "邮箱不能为空!" },
                 {
-                  pattern: /^[\w.-]+@\w+\.\w+(\.\w+)?$/,
-                  message: "邮箱格式错误",
-                },
-              ]}
-            >
-              <Input placeholder="Email" className="Input" />
-            </Form.Item>
-
-            <Form.Item
-              name="password"
-              rules={[
-                { required: true, message: "密码不能为空!" },
-                { max: 20, message: "密码长度不能超过20个字符!" },
-                { min: 6, message: "密码长度不能少于6位、多于20位" },
-              ]}
-            >
-              <Input.Password
-                placeholder="password"
-                className="Input"
-                maxLength={20}
-              />
-            </Form.Item>
-            <Form.Item
-              name="reTypePassword"
-              rules={[
-                { required: true, message: "密码不能为空!" },
-                { max: 20, message: "密码长度不能超过20个字符!" },
-                { min: 6, message: "密码长度不能少于6位、多于20位" },
-
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue("password") === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(
-                      new Error("两次密码输入不一致，请重新输入")
-                    );
+                  validator: async (_, value) => {
+                    const phone = /^1\d{10}$/;
+                    const email = /^\S+@\S+\.\S+$/;
+                    const id = /^i[1-9]\d*$/;
+                    if (!value)
+                      return Promise.reject(new Error("请输入手机/邮箱/ID"));
+                    if (
+                      !phone.test(value) &&
+                      !email.test(value) &&
+                      !id.test(value)
+                    )
+                      return Promise.reject(new Error("格式错误"));
+                    if (phone.test(value) && !config.phoneActive)
+                      return Promise.reject(new Error("手机暂不可用"));
                   },
-                }),
+                },
               ]}
-            >
-              <Input.Password
-                placeholder="password"
-                className="Input"
-                maxLength={20}
-              />
-            </Form.Item>
-
-            <Form.Item>
-              <Button type="primary" className="submit-btn">
-                立即注册
-              </Button>
-            </Form.Item>
-          </Form>
+            />
+            <ProFormText.Password
+              name="password"
+              fieldProps={{
+                size: "large",
+                prefix: <LockOutlined className={"prefixIcon"} />,
+              }}
+              placeholder={"密码"}
+              rules={[
+                {
+                  required: true,
+                  message: "请输入密码！",
+                },
+              ]}
+            />
+          </>
+        )}
+        {loginType === "captcha" && (
+          <>
+            <ProFormText
+              fieldProps={{
+                size: "large",
+                prefix: <SendOutlined className={"prefixIcon"} />,
+              }}
+              name="username"
+              placeholder={"手机/邮箱"}
+              rules={[
+                {
+                  validator: async (_, value) => {
+                    const phone = /^1\d{10}$/;
+                    const email = /^\S+@\S+\.\S+$/;
+                    if (!value)
+                      return Promise.reject(new Error("请输入手机/邮箱"));
+                    if (!phone.test(value) && !email.test(value))
+                      return Promise.reject(new Error("格式错误"));
+                    if (phone.test(value) && !config.phoneActive)
+                      return Promise.reject(new Error("手机暂不可用"));
+                  },
+                },
+              ]}
+            />
+            <ProFormCaptcha
+              fieldProps={{
+                size: "large",
+                prefix: <LockOutlined className={"prefixIcon"} />,
+              }}
+              captchaProps={{
+                size: "large",
+              }}
+              placeholder={"请输入验证码"}
+              phoneName="username"
+              countDown={60}
+              captchaTextRender={(timing, count) => {
+                if (timing) {
+                  return `${count} ${"获取验证码"}`;
+                }
+                return "获取验证码";
+              }}
+              name="captcha"
+              rules={[
+                {
+                  required: true,
+                  message: "请输入验证码！",
+                },
+              ]}
+              onGetCaptcha={async (username) => {
+                let flag = await vertifyService.getLoginVertifyCode({
+                  username,
+                });
+                if (flag) message.success(flag);
+                else {
+                  message.error("验证码发送失败!");
+                  throw new Error("验证码发送失败!");
+                }
+              }}
+            />
+          </>
+        )}
+        <div
+          style={{
+            marginBlockEnd: 24,
+          }}
+        >
+          <ProFormCheckbox noStyle name="remember-me">
+            自动登录
+          </ProFormCheckbox>
+          <a
+            style={{
+              float: "right",
+            }}
+            href="/resetPassword"
+          >
+            忘记密码
+          </a>
         </div>
-        <div className="desc-warp">
-          <div className="desc-warp-item sign-up-desc">
-            <div className="content">
-              <Button
-                onClick={signUpClick}
-                className="transfer-btn"
-                type="default"
-              >
-                注册
-              </Button>
-            </div>
-            {/* <img src="./img/log.svg" alt=""/> */}
-          </div>
-          <div className="desc-warp-item sign-in-desc">
-            <div className="content">
-              <Button
-                onClick={signInClick}
-                className="transfer-btn"
-                type="default"
-              >
-                登录
-              </Button>
-            </div>
-            {/* <img src="./img/register.svg" alt=""/> */}
-          </div>
-        </div>
-      </div>
-    </>
+      </LoginFormPage>
+    </div>
   );
 }
-function mapStateToProps(state) {
-  return {
-    isLogin : state.userReducer.isLogin
-  };
-}
-function mapDispatchToProps(dispatch) {
-  return {
-    // signUp: () => dispatch(signUp(data)),
-  }
-}
-const LoginComponent2 = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginComponent);
-
-export default LoginComponent2;
+export default LoginComponent;

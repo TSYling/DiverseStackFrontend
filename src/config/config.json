@@ -1,0 +1,116 @@
+{
+  "baseURL":"http://localhost:5173",
+  "light-theme":{
+    "token": {
+      "fontSize": 15,
+      "wireframe": true,
+      "colorPrimary": "#17cbe3",
+      "colorSuccess": "#64f51b",
+      "colorInfo": "#17cbe3"
+    },
+    "components": {
+      "Menu": {
+        "algorithm": true,
+        "subMenuItemBg": "rgba(255, 255, 255, 0.02)"
+      }
+    }
+  },
+  "dark-theme":{
+    "token": {
+      "fontSize": 15,
+      "wireframe": true,
+      "colorPrimary": "#17cbe3",
+      "colorSuccess": "#64f51b",
+      "colorInfo": "#17cbe3",
+      "colorBgBase": "#052226"
+    },
+    "components": {
+      "Menu": {
+        "algorithm": true,
+        "subMenuItemBg": "rgba(255, 255, 255, 0.02)"
+      }
+    }
+  },
+  "menu":{
+    "dark-background": "#0a424a",
+    "light-background": "#FFFFFF"
+  },
+  "menuOptions" : [
+    {
+      "label": "音乐🎶",
+      "key": "music"
+    },
+    {
+      "label": "直播🎊",
+      "key": "live"
+    },
+    {
+      "label": "聊天💬",
+      "key": "chat"
+    }
+  ],
+  "urlTitle":{
+    "":"中心",
+    "music":"音乐🎶",
+    "live":"直播🎊",
+    "chat":"聊天💬"
+  },
+  
+  "indexCaracter":{
+    "0": "零",
+    "1": "壹",
+    "2": "贰",
+    "3": "叁",
+    "4": "肆",
+    "5": "伍",
+    "6": "陆",
+    "7": "柒",
+    "8": "捌",
+    "9": "玖",
+    "10": "拾"
+  },
+  "fiveColors" : {
+    "0%": "#ff4d4f",
+    "25%": "#dd6b98",
+    "50%": "#faad14",
+    "75%": "#17cbe3",
+    "100%": "#64f51b"
+  },
+  "coinName":"通宝",
+  "loginTabItems" : [
+    {
+    "key": "account",
+    "label": "密码登录"
+    },
+    {
+    "key": "captcha",
+    "label": "验证码登录"
+    }
+  ],
+  "RegisterTabItems": [
+    {
+      "key": "captcha",
+      "label": "验证码注册"
+    },
+    {
+      "key": "special",
+      "label": "特邀注册"
+    }
+  ],
+  "login-page-info":{
+    "title":"信息发布",
+    "date": "2023/9",
+    "content":"项目开发中, 敬请期待"
+  },
+  "webSiteTitle":"LinSite",
+  "webSiteSubTitle":"一段看起来很厉害的副标题",
+  "logoUrl":"./icon_gif2.gif",
+  "phoneActive": false,
+  "register":{
+    "success":{
+      "title": "恭喜您，注册成功",
+      "subTitle":"您注册的账号id为:",
+      "subTitle2":"请妥善保管您的账号。点击右上方按钮可进行登录操作，点击下方按钮回到主页。"
+    }
+  }
+}

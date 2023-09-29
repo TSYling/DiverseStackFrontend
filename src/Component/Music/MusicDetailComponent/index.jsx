@@ -19,7 +19,7 @@ function MusicDetailComponent(props) {
   ) : (
     <>
       {/* <ReactAudioPlayer src="https://li-sycdn.kuwo.cn/7ccde551024ae4567509f695664b9749/64cd0569/resource/n1/51/15/3900761677.mp3?from$unkown&plat$wapi" /> */}
-        <video controls="true" autoPlay="" name="media">
+        <video controls={true} autoPlay="" name="media">
           <source src={data} type="audio/mpeg" />
         </video>
       MusicDetailComponent
