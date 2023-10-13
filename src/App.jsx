@@ -4,7 +4,8 @@ import { lazy, Suspense, useEffect } from "react";
 import cookie from "react-cookies";
 import service from "./util/axoisUtil";
 import userService from "./service/User";
-import {useDispatch} from "react-redux"
+import { useDispatch } from "react-redux"
+import { Spin } from "antd";
 const LoginComponent = lazy(() => import("./Component/User/LoginComponent"));
 const LoginInfoComponent = lazy(() =>
   import("./Component/User/LoginInfoComponent")
@@ -52,29 +53,39 @@ function App() {
   return (
     <>
       {/* <RouterProvider router={router} /> */}
-      <Suspense fallback={<div>Loading...</div>}>
-        <BrowserRouter>
+      {/* <Suspense
+        fallback={
+          <div className="loading">
+            <Spin size="large" />
+          </div>
+        }
+      >
+        <BrowserRouter> */}
+      {/* 注意：路由跳转不可贸然原生local进行跳转
+          使用原生路由跳转会重新刷新界面使得状态传递失效      
+      */}
           <Routes>
-            <Route path="/" element={<IndexComponent title="欢迎~" />} />
-            <Route path="/login" element={<LoginComponent title="登录" />} />
+            <Route path="" element={<IndexComponent title="欢迎~" />} />
+            <Route path="login" element={<LoginComponent title="登录" />} />
             <Route
-              path="/logout"
+              path="logout"
               element={<LogoutComponent title="注销中。。" />}
             />
             <Route
-              path="/loginInfo"
+              path="loginInfo"
               element={<LoginInfoComponent title="用户信息" />}
             />
-            <Route path="/register" element={<RegisterComponent />} />
-            <Route path="/music" exact element={<MusicSearchComponent />} />
-            <Route path="/music/detail" element={<MusicDetailComponent />} />
-            <Route path="/live" element={<LiveComponent />} />
-            <Route path="/chat" element={<ChatComponent />} />
-            <Route path="/test" element={<TestComponent />} />
+            <Route path="register" element={<RegisterComponent />} />
+            <Route path="music" exact element={<MusicSearchComponent />} />
+            <Route path="music/detail" element={<MusicDetailComponent />} />
+            <Route path="live" element={<LiveComponent />} />
+            <Route path="chat/*" element={<ChatComponent />} />
+            
+            <Route path="test" element={<TestComponent />} />
             <Route path="*" element={<NotFoundComponent />} />
           </Routes>
-        </BrowserRouter>
-      </Suspense>
+        {/* </BrowserRouter>
+      </Suspense> */}
     </>
   );
 }

@@ -1,12 +1,14 @@
 import "./index.scss";
-import { useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate,Link } from "react-router-dom";
-import { Input, Pagination, List, Avatar } from "antd";
-import { connect } from "react-redux";
+import {  useEffect, useState } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Input, Pagination, List, Avatar,message } from "antd";
 import musicService from "../../../service/Music";
 const { Search } = Input;
 
-function MusicSearchComponent(props) {
+function MusicSearchComponent() {
+  const dispatch = useDispatch();
+  const musicReducer = useSelector((state) => state.musicReducer);
   const navigate = useNavigate();
   const location = useLocation();
   const [inputKeyword, setInputKeyword] = useState("");
@@ -14,15 +16,17 @@ function MusicSearchComponent(props) {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState([]);
   const searchString = location.search;
+  const [messageApi, contextHolder] = message.useMessage();
   useEffect(() => {
-    if (Object.keys(props.data) != 0 && props.data!=null) {
-      console.log(props);
+    if (
+      Object.keys(musicReducer.searchData) != 0 &&
+      musicReducer.searchData != null
+    ) {
       // http://img1.kwcdn.kuwo.cn/star/albumcover/
-      setTotal(props.data.data.total);
-      setList(props.data.data.data);
+      setTotal(musicReducer.searchData.total);
+      setList(musicReducer.searchData.data);
     }
-    // setTotal(props.data.list.total);
-  },[props.data]);
+  }, [musicReducer]);
   useEffect(() => {
     document.title = "音乐搜索";
   },[]);
@@ -41,12 +45,18 @@ function MusicSearchComponent(props) {
         // 设置当前为搜索状态
         setLoadState(true);
         // 开始查询
-        await musicService.searchMusic(keyword)
+        dispatch(musicService.searchMusic(keyword)).catch((e) => {
+          let info = e.response.data.information;
+          messageApi.open({
+            type: "error",
+            content: info,
+          });
+        })
         // 关闭搜索状态
         setLoadState(false);
       }
     })();
-  }, [searchString]);
+  }, [searchString,dispatch,messageApi]);
 
   const onSearch = (data) => {
     if (data.trim() == "") {
@@ -67,6 +77,7 @@ function MusicSearchComponent(props) {
 
   return (
     <div className="musicSearchContainer">
+      {contextHolder}
       <Search
         onSearch={onSearch}
         onChange={inputOnChange}
@@ -81,7 +92,7 @@ function MusicSearchComponent(props) {
         className="musicSearchList"
         itemLayout="horizontal"
         dataSource={list}
-        renderItem={(item, index) => (
+        renderItem={(item) => (
           <List.Item>
             <List.Item.Meta
               avatar={
@@ -104,8 +115,8 @@ function MusicSearchComponent(props) {
                 item.ARTIST +
                 "专辑：" +
                 item.ALBUM +
-                (item.mvpayinfo.vid == "0" ? "" : "  暂无法播放 ") +
-                (item.payInfo.play == "1111" ? "         VIP":"")
+                // (item.mvpayinfo.vid == "0" ? "" : "  暂无法播放 ") +
+                (item.payInfo.play == "1111" ? "         VIP" : "")
               }
             />
           </List.Item>
@@ -122,8 +133,6 @@ function MusicSearchComponent(props) {
   );
 }
 
-const MusicSearchComponent2 = connect((state) => { return { data:state.musicReducer } }, (dispatch) => { return {} })(MusicSearchComponent);
-
-export default MusicSearchComponent2;
+export default MusicSearchComponent;
 
 

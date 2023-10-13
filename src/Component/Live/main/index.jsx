@@ -2,9 +2,8 @@ import "./index.scss"
 import Player from "../player/index.jsx"
 import videojs from "video.js"
 import "video.js/dist/video-js.css"
-import { useEffect} from "react"
+import { useEffect,useState} from "react"
 const LiveComponent = () => {
-
   return (
     <div>
       <div className="video">Live Component</div>

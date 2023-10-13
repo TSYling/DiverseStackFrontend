@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
+// import { Navigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import service from '../../../util/axoisUtil'
 import {logout} from "../../../store/reducers/userReducer"
@@ -18,7 +18,9 @@ function LogoutComponent(props) {
       })
   })
 
-  return <Navigate to="/" replace />
+  // return <Navigate to="/" replace />
+  // 可以清除所有相关数据 状态state
+  return <>{(window.location.href = "/")}</>;
 }
 
 export default LogoutComponent
